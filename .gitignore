@@ -72,3 +72,6 @@ gen-external-apklibs
 
 # Config
 gradle.properties
+
+# Personal
+app/src/main/res/values/google_maps_api.xml

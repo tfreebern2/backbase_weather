@@ -6,6 +6,9 @@ public class Location {
     private double longitude;
     private String name;
 
+    public Location() {
+    }
+
     public double getLatitude() {
         return latitude;
     }
