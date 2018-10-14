@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">WeatherApp</string>
     <string name="action_map">Map</string>
+    <string name="action_locations">Locations</string>
 </resources>
