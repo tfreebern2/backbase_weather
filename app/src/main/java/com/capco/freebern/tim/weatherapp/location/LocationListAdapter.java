@@ -26,7 +26,7 @@ public class LocationListAdapter extends BaseAdapter {
         mLocations = locations;
     }
 
-    static class ViewHolder {
+    static class ViewHolder{
         TextView locationName;
         LinearLayout.LayoutParams params;
     }
@@ -66,5 +66,9 @@ public class LocationListAdapter extends BaseAdapter {
         holder.locationName.setText(name);
 
         return convertView;
+
+
     }
+
+
 }

@@ -3,15 +3,14 @@ package com.capco.freebern.tim.weatherapp.main;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.capco.freebern.tim.weatherapp.R;
 import com.capco.freebern.tim.weatherapp.location.LocationListViewFragment;
-import com.capco.freebern.tim.weatherapp.location.LocationsService;
+import com.capco.freebern.tim.weatherapp.LocationsService;
 import com.capco.freebern.tim.weatherapp.map.MapFragment;
 
-public class MainActivity extends FragmentActivity implements LocationListViewFragment.OnLineSelectedListener {
+public class MainActivity extends FragmentActivity {
 
     private ListView mLocationListView;
     private LocationsService mLocationsService;
@@ -34,11 +33,6 @@ public class MainActivity extends FragmentActivity implements LocationListViewFr
         transaction.replace(R.id.main_fragment, mMainFragment);
 
         transaction.commit();
-
-    }
-
-    @Override
-    public void onListItemSelected(int position) {
 
     }
 

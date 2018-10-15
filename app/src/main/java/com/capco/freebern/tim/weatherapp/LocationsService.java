@@ -1,4 +1,4 @@
-package com.capco.freebern.tim.weatherapp.location;
+package com.capco.freebern.tim.weatherapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;

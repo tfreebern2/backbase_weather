@@ -1,16 +1,13 @@
 package com.capco.freebern.tim.weatherapp.map;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
-import com.capco.freebern.tim.weatherapp.location.LocationsService;
+import com.capco.freebern.tim.weatherapp.LocationsService;
 import com.capco.freebern.tim.weatherapp.R;
 import com.capco.freebern.tim.weatherapp.main.MainActivity;
 import com.capco.freebern.tim.weatherapp.location.model.Location;
@@ -77,12 +74,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void initialize() {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
         mapFragment.getMapAsync(this);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
     }
 
 }

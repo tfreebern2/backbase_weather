@@ -2,4 +2,11 @@
     <string name="app_name">WeatherApp</string>
     <string name="action_map">Map</string>
     <string name="action_locations">Locations</string>
+    <string name="label_temperature">Temperature: </string>
+    <string name="label_humidity">Humidity: </string>
+    <string name="label_rain_level">Rain Level: </string>
+    <string name="label_cloudiness">Cloudiness: </string>
+    <string name="label_wind_speed">Wind Speed: </string>
+    <string name="label_wind_direction">Wind Direction: </string>
+    <string name="dummy_string">Lorem ipsum</string>
 </resources>
