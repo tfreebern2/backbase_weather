@@ -1,14 +1,18 @@
 package com.capco.freebern.tim.weatherapp.map;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.capco.freebern.tim.weatherapp.LocationsService;
+import com.capco.freebern.tim.weatherapp.location.LocationsService;
 import com.capco.freebern.tim.weatherapp.R;
-import com.capco.freebern.tim.weatherapp.location.LocationActivity;
+import com.capco.freebern.tim.weatherapp.main.MainActivity;
 import com.capco.freebern.tim.weatherapp.location.model.Location;
 import com.capco.freebern.tim.weatherapp.map.marker.MarkerManager;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,29 +25,26 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 import java.util.UUID;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private ImageButton mLocationsButton;
     private LocationsService mLocationsService;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        mLocationsService = new LocationsService(getApplicationContext());
-        mLocationsButton = (ImageButton) findViewById(R.id.locationsButton);
+        mLocationsService = new LocationsService(getContext());
+    }
 
-        mLocationsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent locationsIntent = new Intent(MapsActivity.this, LocationActivity.class);
-                startActivity(locationsIntent);
-            }
-        });
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_map,
+                container, false);
+
+        initialize();
+
+        return view;
     }
 
     @Override
@@ -58,7 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 Marker marker = mMap.addMarker(markerOpts);
                 Location location = MarkerManager.convertToLocation(marker);
-                getLocationsService().saveLocation(location.getName(), location);
+                ((MainActivity) getActivity()).getLocationsService().saveLocation(location.getName(), location);
             }
         });
 
@@ -66,14 +67,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void loadLocations(){
-        List<Location> locations = getLocationsService().getAllLocations();
+        List<Location> locations = ((MainActivity) getActivity()).getLocationsService().getAllLocations();
         for(Location location : locations){
             mMap.addMarker(MarkerManager.convertToMarkerOptions(location));
         }
     }
 
-    public LocationsService getLocationsService(){
-        return mLocationsService;
+
+    public void initialize() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
     }
 
 }
