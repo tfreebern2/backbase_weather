@@ -16,6 +16,7 @@ public class LocationsService {
     private static final String SHARED_PREFERENCES_NAME = "com.capco.freebern.tim.weatherapp.locations";
 
     private SharedPreferences sharedPreferences;
+    private List<LocationsUpdatedListener> listeners;
 
     private Location getLocation(String json){
         GsonBuilder gsonBuilder = new GsonBuilder();
@@ -24,6 +25,7 @@ public class LocationsService {
     }
     public LocationsService(Context context){
         this.sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+        this.listeners = new ArrayList<>();
     }
 
     public void saveLocation(String key, Location location){
@@ -33,12 +35,14 @@ public class LocationsService {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putString(key, json);
         editor.apply();
+        updateListeners(getAllLocations());
     }
 
     public void removeLocation(String key){
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.remove(key);
         editor.apply();
+        updateListeners(getAllLocations());
     }
 
     public List<Location> getAllLocations(){
@@ -49,6 +53,20 @@ public class LocationsService {
             locations.add(getLocation(locationStr));
         }
         return locations;
+    }
+
+    public void registerListener(LocationsUpdatedListener listener) {
+        this.listeners.add(listener);
+    }
+
+    public void unregisterListener(LocationsUpdatedListener listener) {
+        this.listeners.remove(listener);
+    }
+
+    private void updateListeners(List<Location> locations) {
+        for (LocationsUpdatedListener listener : listeners) {
+            listener.Updated(locations);
+        }
     }
 
 }

@@ -16,7 +16,7 @@ import com.capco.freebern.tim.weatherapp.main.MainActivity;
 import com.capco.freebern.tim.weatherapp.weather.WeatherFragment;
 
 public class LocationListViewFragment extends ListFragment {
-    ListAdapter mAdapter;
+    LocationListAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +29,7 @@ public class LocationListViewFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_locations, null);
 
         mAdapter = new LocationListAdapter(getActivity(), ((MainActivity) getActivity()).getLocationsService().getAllLocations());
+        ((MainActivity) getActivity()).getLocationsService().registerListener(mAdapter);
         ListView listView = view.findViewById(R.id.list);
         listView.setAdapter(mAdapter);
 
@@ -45,5 +46,11 @@ public class LocationListViewFragment extends ListFragment {
         transaction.addToBackStack(null);
         transaction.commit();
         super.onListItemClick(l, v, position, id);
+    }
+
+    @Override
+    public void onDestroyView() {
+        ((MainActivity) getActivity()).getLocationsService().unregisterListener(mAdapter);
+        super.onDestroyView();
     }
 }

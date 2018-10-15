@@ -12,11 +12,12 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.capco.freebern.tim.weatherapp.LocationsUpdatedListener;
 import com.capco.freebern.tim.weatherapp.R;
 import com.capco.freebern.tim.weatherapp.location.model.Location;
 import java.util.List;
 
-public class LocationListAdapter extends BaseAdapter {
+public class LocationListAdapter extends BaseAdapter implements LocationsUpdatedListener {
 
     private Activity mActivity;
     private List<Location> mLocations;
@@ -24,6 +25,12 @@ public class LocationListAdapter extends BaseAdapter {
     public LocationListAdapter(Activity activity, List<Location> locations) {
         mActivity = activity;
         mLocations = locations;
+    }
+
+    @Override
+    public void Updated(List<Location> locations) {
+        mLocations = locations;
+        notifyDataSetChanged();
     }
 
     static class ViewHolder{
