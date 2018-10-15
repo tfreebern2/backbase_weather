@@ -2,11 +2,11 @@ package com.capco.freebern.tim.weatherapp.map;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.capco.freebern.tim.weatherapp.LocationsService;
 import com.capco.freebern.tim.weatherapp.R;
 import com.capco.freebern.tim.weatherapp.location.LocationActivity;
 import com.capco.freebern.tim.weatherapp.location.model.Location;
@@ -15,18 +15,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.List;
+import java.util.UUID;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private DatabaseReference mDatabaseReference;
     private ImageButton mLocationsButton;
+    private LocationsService mLocationsService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +34,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("locations");
+        mLocationsService = new LocationsService(getApplicationContext());
         mLocationsButton = (ImageButton) findViewById(R.id.locationsButton);
 
         mLocationsButton.setOnClickListener(new View.OnClickListener() {
@@ -52,46 +50,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mDatabaseReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                LatLng newLocation = new LatLng(
-                        dataSnapshot.child("latitude").getValue(Double.class),
-                        dataSnapshot.child("longitude").getValue(Double.class)
-                );
-                mMap.addMarker(new MarkerOptions()
-                        .position(newLocation)
-                        .title(dataSnapshot.child("name").getValue(String.class)));
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                MarkerOptions marker = new MarkerOptions().position
-                        (new LatLng(latLng.latitude, latLng.longitude)).title("New Location");
+                MarkerOptions markerOpts = new MarkerOptions().position
+                        (new LatLng(latLng.latitude, latLng.longitude)).title(UUID.randomUUID().toString());
 
+                Marker marker = mMap.addMarker(markerOpts);
                 Location location = MarkerManager.convertToLocation(marker);
-                mDatabaseReference.push().setValue(location);
+                getLocationsService().saveLocation(location.getName(), location);
             }
         });
 
+        loadLocations();
+    }
+
+    private void loadLocations(){
+        List<Location> locations = getLocationsService().getAllLocations();
+        for(Location location : locations){
+            mMap.addMarker(MarkerManager.convertToMarkerOptions(location));
+        }
+    }
+
+    public LocationsService getLocationsService(){
+        return mLocationsService;
     }
 
 }

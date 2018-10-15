@@ -13,53 +13,16 @@ import android.widget.TextView;
 
 import com.capco.freebern.tim.weatherapp.R;
 import com.capco.freebern.tim.weatherapp.location.model.Location;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class LocationListAdapter extends BaseAdapter {
 
     private Activity mActivity;
-    private DatabaseReference mDatabaseReference;
-    private ArrayList<DataSnapshot> mSnapshotList;
+    private List<Location> mLocations;
 
-    public ChildEventListener mListener = new ChildEventListener() {
-        @Override
-        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            mSnapshotList.add(dataSnapshot);
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-        }
-
-        @Override
-        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-        }
-
-        @Override
-        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-    };
-
-    public LocationListAdapter(Activity activity, DatabaseReference ref) {
+    public LocationListAdapter(Activity activity, List<Location> locations) {
         mActivity = activity;
-        mDatabaseReference = ref.child("locations");
-        mDatabaseReference.addChildEventListener(mListener);
-
-        mSnapshotList = new ArrayList<>();
+        mLocations = locations;
     }
 
     static class ViewHolder {
@@ -69,13 +32,12 @@ public class LocationListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mSnapshotList.size();
+        return mLocations.size();
     }
 
     @Override
     public Location getItem(int position) {
-        DataSnapshot dataSnapshot = mSnapshotList.get(position);
-        return dataSnapshot.getValue(Location.class);
+        return mLocations.get(position);
     }
 
     @Override
@@ -103,9 +65,5 @@ public class LocationListAdapter extends BaseAdapter {
         holder.locationName.setText(name);
 
         return convertView;
-    }
-
-    public void cleanUp() {
-        mDatabaseReference.removeEventListener(mListener);
     }
 }

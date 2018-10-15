@@ -7,25 +7,23 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.capco.freebern.tim.weatherapp.LocationsService;
 import com.capco.freebern.tim.weatherapp.R;
 import com.capco.freebern.tim.weatherapp.map.MapsActivity;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class LocationActivity extends AppCompatActivity {
 
-    private DatabaseReference mDatabaseReference;
     private ListView mLocationListView;
     private LocationListAdapter mAdapter;
     private ImageButton mMapButton;
+    private LocationsService mLocationsService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-
+        mLocationsService = new LocationsService(getApplicationContext());
         mLocationListView = (ListView) findViewById(R.id.location_list_view);
         mMapButton = (ImageButton) findViewById(R.id.mapButton);
 
@@ -41,13 +39,12 @@ public class LocationActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        mAdapter = new LocationListAdapter(this, mDatabaseReference);
+        mAdapter = new LocationListAdapter(this, getLocationsService().getAllLocations());
         mLocationListView.setAdapter(mAdapter);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mAdapter.cleanUp();
+    public LocationsService getLocationsService(){
+        return mLocationsService;
     }
+
 }
