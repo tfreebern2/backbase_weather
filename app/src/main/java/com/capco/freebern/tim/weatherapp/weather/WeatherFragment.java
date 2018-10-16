@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.capco.freebern.tim.weatherapp.LocationsService;
 import com.capco.freebern.tim.weatherapp.R;
 import com.capco.freebern.tim.weatherapp.WeatherService;
 import com.capco.freebern.tim.weatherapp.location.model.Location;
@@ -26,6 +27,8 @@ public class WeatherFragment extends Fragment {
         weatherService = new WeatherService();
         OpenWeatherAPITask openWeatherAPITask = new OpenWeatherAPITask(getString(R.string.open_weather_key), this);
         openWeatherAPITask.execute(location);
+        TextView cityNameText = view.findViewById(R.id.tv_city);
+        cityNameText.setText(location.getName());
         return view;
     }
 
