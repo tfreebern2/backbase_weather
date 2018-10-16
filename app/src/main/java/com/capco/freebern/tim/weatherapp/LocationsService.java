@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.capco.freebern.tim.weatherapp.location.model.Location;
+import com.capco.freebern.tim.weatherapp.weather.GeocodeResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -53,6 +54,16 @@ public class LocationsService {
             locations.add(getLocation(locationStr));
         }
         return locations;
+    }
+
+    public String getCityName(String json){
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        GeocodeResponse geocodeResponse = gson.fromJson(json, GeocodeResponse.class);
+        if(geocodeResponse.results.length > 0)
+            return geocodeResponse.results[0].formattedAddress;
+        else
+            return "Unknown Location";
     }
 
     public void registerListener(LocationsUpdatedListener listener) {

@@ -3,8 +3,10 @@ package com.capco.freebern.tim.weatherapp.weather;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.capco.freebern.tim.weatherapp.ApiFinishedListener;
+import com.capco.freebern.tim.weatherapp.LocationsService;
 import com.capco.freebern.tim.weatherapp.location.model.Location;
-import com.capco.freebern.tim.weatherapp.weather.model.CurrentWeather;
+import com.google.android.gms.maps.model.Marker;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,22 +16,27 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 
-public class OpenWeatherAPITask extends AsyncTask<Location, Void, String> {
-    private static final String API = "http://api.openweathermap.org/data/2.5/weather?lat=%1$f&lon=%2$f&appid=%3$s";
-    private static final String TAG = "OpenWeatherAPITask";
+public class GeocodeAPITask extends AsyncTask<Location, Void, String> {
+    private static final String API = "https://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&key=%s";
+    private static final String TAG = "GeocodeAPITask";
     private String apiKey;
-    private WeatherFragment mWeatherFragment;
+    private Location location;
+    private Marker marker;
+    private LocationsService locationsService;
+    private ApiFinishedListener mApiFinishedListener;
     private URL url;
 
-    public OpenWeatherAPITask(String apiKey, WeatherFragment weatherFragment) {
+    public GeocodeAPITask(String apiKey, Location location, LocationsService locationsService, ApiFinishedListener listener) {
         this.apiKey = apiKey;
-        this.mWeatherFragment = weatherFragment;
+        this.location = location;
+        this.locationsService = locationsService;
+        this.mApiFinishedListener = listener;
     }
 
     @Override
     protected String doInBackground(Location... locations) {
         String apiString = String.format(Locale.US, API, locations[0].getLatitude(), locations[0].getLongitude(), apiKey);
-
+        Log.d("URL", apiString);
         try {
             url = new URL(apiString);
             try {
@@ -42,6 +49,7 @@ public class OpenWeatherAPITask extends AsyncTask<Location, Void, String> {
                         stringBuilder.append(line).append("\n");
                     }
                     bufferedReader.close();
+                    Log.d("JSON", stringBuilder.toString());
                     return stringBuilder.toString();
                 }
                 finally{
@@ -58,8 +66,10 @@ public class OpenWeatherAPITask extends AsyncTask<Location, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        CurrentWeather currentWeather = mWeatherFragment.getWeatherService().getCurrentWeather(s);
-        mWeatherFragment.updateView(currentWeather);
+        String cityName = locationsService.getCityName(s);
+        this.location.setName(cityName);
+        mApiFinishedListener.onFinished(this.location);
         super.onPostExecute(s);
     }
+
 }

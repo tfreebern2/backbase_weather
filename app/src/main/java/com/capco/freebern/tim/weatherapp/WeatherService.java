@@ -1,7 +1,7 @@
 package com.capco.freebern.tim.weatherapp;
 
-import com.capco.freebern.tim.weatherapp.weather.model.CurrentWeather;
 import com.capco.freebern.tim.weatherapp.weather.CurrentWeatherResponse;
+import com.capco.freebern.tim.weatherapp.weather.model.CurrentWeather;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -21,4 +21,5 @@ public class WeatherService {
         currentWeather.setWindDirection(currentWeatherResponse.wind.direction);
         return currentWeather;
     }
+
 }

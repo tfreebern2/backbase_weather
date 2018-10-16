@@ -7,6 +7,30 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/tv_city_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        android:text="@string/label_temperature"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        android:text="@string/dummy_string"
+        app:layout_constraintStart_toEndOf="@+id/tv_temperature_label"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/tv_temperature_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
