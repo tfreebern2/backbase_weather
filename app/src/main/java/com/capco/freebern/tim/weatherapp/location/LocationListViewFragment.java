@@ -3,10 +3,12 @@ package com.capco.freebern.tim.weatherapp.location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -17,6 +19,7 @@ import com.capco.freebern.tim.weatherapp.weather.WeatherFragment;
 
 public class LocationListViewFragment extends ListFragment {
     LocationListAdapter mAdapter;
+    ImageButton mRemoveLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,18 +37,6 @@ public class LocationListViewFragment extends ListFragment {
         listView.setAdapter(mAdapter);
 
         return view;
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        Location location = (Location) l.getAdapter().getItem(position);
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        WeatherFragment weatherFragment = new WeatherFragment();
-        weatherFragment.setLocation(location);
-        transaction.replace(R.id.main_fragment, weatherFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-        super.onListItemClick(l, v, position, id);
     }
 
     @Override
