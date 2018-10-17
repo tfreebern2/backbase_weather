@@ -21,7 +21,6 @@ import com.capco.freebern.tim.weatherapp.weather.WeatherFragment;
 
 public class LocationListViewFragment extends Fragment {
     LocationListAdapter mAdapter;
-    ImageButton mRemoveLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,15 +37,6 @@ public class LocationListViewFragment extends Fragment {
         ListView listView = view.findViewById(R.id.list);
         listView.setAdapter(mAdapter);
 
-        if(savedInstanceState != null){
-            WeatherFragment frag = (WeatherFragment) getActivity().getSupportFragmentManager().getFragment(savedInstanceState, "weather");
-            if(frag != null){
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.main_fragment, frag, "weather");
-                ft.commit();
-            }
-        }
-
         return view;
     }
 
@@ -54,14 +44,5 @@ public class LocationListViewFragment extends Fragment {
     public void onDestroyView() {
         ((MainActivity) getActivity()).getLocationsService().unregisterListener(mAdapter);
         super.onDestroyView();
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        WeatherFragment frag = (WeatherFragment) getActivity().getSupportFragmentManager().findFragmentByTag("weather");
-        if(frag != null) {
-            getActivity().getSupportFragmentManager().putFragment(outState, "weather", frag);
-        }
     }
 }

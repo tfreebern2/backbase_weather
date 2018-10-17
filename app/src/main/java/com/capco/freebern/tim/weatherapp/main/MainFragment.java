@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.capco.freebern.tim.weatherapp.R;
 import com.capco.freebern.tim.weatherapp.location.LocationListViewFragment;
 import com.capco.freebern.tim.weatherapp.map.MapFragment;
+import com.capco.freebern.tim.weatherapp.weather.WeatherFragment;
 
 public class MainFragment extends Fragment {
 
@@ -32,6 +33,13 @@ public class MainFragment extends Fragment {
         ((LinearLayout) view.findViewById(R.id.linearContainer)).setOrientation(getResources().getConfiguration().orientation);
 
         if (savedInstanceState != null) {
+            WeatherFragment weatherFragment = null;
+            try {
+                weatherFragment = (WeatherFragment) getActivity().getSupportFragmentManager().getFragment(savedInstanceState, "weather");
+            } catch(Exception ex){
+                ex.printStackTrace();
+            }
+
             if (mLocationListViewFragment == null) {
                 mLocationListViewFragment = (LocationListViewFragment) getChildFragmentManager().getFragment(savedInstanceState, "loc");
             }
@@ -39,18 +47,28 @@ public class MainFragment extends Fragment {
             if (mMapFragment == null) {
                 mMapFragment = (MapFragment) getChildFragmentManager().getFragment(savedInstanceState, "map");
             }
-        } else {
 
+            if(weatherFragment != null && weatherFragment.isAdded()){
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.main_fragment, weatherFragment);
+                ft.commit();
+
+            } else {
+                if (mLocationListViewFragment.isAdded() && mMapFragment.isAdded()) {
+                    FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_two, mLocationListViewFragment, "loc");
+                    transaction.replace(R.id.fragment_one, mMapFragment, "map");
+                    transaction.commit();
+                }
+            }
+        } else {
             mLocationListViewFragment = new LocationListViewFragment();
             mMapFragment = new MapFragment();
-
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_two, mLocationListViewFragment, "loc");
+            transaction.replace(R.id.fragment_one, mMapFragment, "map");
+            transaction.commit();
         }
-
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_two, mLocationListViewFragment, "loc");
-        transaction.replace(R.id.fragment_one, mMapFragment, "map");
-
-        transaction.commit();
 
         return view;
     }
@@ -61,6 +79,10 @@ public class MainFragment extends Fragment {
 
         getChildFragmentManager().putFragment(outState, "map", mMapFragment);
         getChildFragmentManager().putFragment(outState, "loc", mLocationListViewFragment);
+        WeatherFragment frag = (WeatherFragment) getActivity().getSupportFragmentManager().findFragmentByTag("weather");
+        if(frag != null){
+            getActivity().getSupportFragmentManager().putFragment(outState, "weather", frag);
+        }
     }
 
 }
