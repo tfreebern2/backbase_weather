@@ -31,7 +31,6 @@ public class MainFragment extends Fragment {
         mLocationListViewFragment = new LocationListViewFragment();
         mMapFragment = new MapFragment();
 
-
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         transaction.replace(R.id.fragment_two, mLocationListViewFragment);

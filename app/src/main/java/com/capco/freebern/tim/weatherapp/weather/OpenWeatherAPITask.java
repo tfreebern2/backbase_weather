@@ -15,7 +15,7 @@ import java.net.URL;
 import java.util.Locale;
 
 public class OpenWeatherAPITask extends AsyncTask<Location, Void, String> {
-    private static final String API = "http://api.openweathermap.org/data/2.5/weather?lat=%1$f&lon=%2$f&appid=%3$s";
+    private static final String API = "http://api.openweathermap.org/data/2.5/weather?lat=%1$f&lon=%2$f&appid=%3$s&units=Imperial";
     private static final String TAG = "OpenWeatherAPITask";
     private String apiKey;
     private WeatherFragment mWeatherFragment;

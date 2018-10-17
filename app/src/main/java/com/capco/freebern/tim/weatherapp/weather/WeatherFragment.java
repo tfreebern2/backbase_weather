@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.capco.freebern.tim.weatherapp.LocationsService;
 import com.capco.freebern.tim.weatherapp.R;
 import com.capco.freebern.tim.weatherapp.WeatherService;
 import com.capco.freebern.tim.weatherapp.location.model.Location;
@@ -53,4 +52,5 @@ public class WeatherFragment extends Fragment {
     public void setLocation(Location location) {
         this.location = location;
     }
+
 }

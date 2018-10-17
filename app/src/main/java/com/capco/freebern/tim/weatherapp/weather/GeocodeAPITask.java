@@ -21,7 +21,6 @@ public class GeocodeAPITask extends AsyncTask<Location, Void, String> {
     private static final String TAG = "GeocodeAPITask";
     private String apiKey;
     private Location location;
-    private Marker marker;
     private LocationsService locationsService;
     private ApiFinishedListener mApiFinishedListener;
     private URL url;
