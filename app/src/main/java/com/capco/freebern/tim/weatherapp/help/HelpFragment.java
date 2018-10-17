@@ -27,8 +27,10 @@ public class HelpFragment extends Fragment {
         webView.getSettings().setPluginState(WebSettings.PluginState.ON);
         webView.getSettings().setAllowFileAccessFromFileURLs(true);
 
-        webView.loadUrl("file:///android_asset/help.html");
+        webView.loadUrl("file:///android_asset/tutorial.html");
 
         return view;
     }
+
+
 }

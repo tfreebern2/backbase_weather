@@ -41,7 +41,7 @@ public class LocationListAdapter extends BaseAdapter implements LocationsUpdated
         notifyDataSetChanged();
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
         TextView locationName;
         ImageButton removeLocation;
         LinearLayout.LayoutParams params;
@@ -85,11 +85,11 @@ public class LocationListAdapter extends BaseAdapter implements LocationsUpdated
         holder.locationName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction = ((FragmentActivity)mActivity)
+                FragmentTransaction transaction = ((FragmentActivity) mActivity)
                         .getSupportFragmentManager().beginTransaction();
                 WeatherFragment weatherFragment = new WeatherFragment();
                 weatherFragment.setLocation(location);
-                transaction.replace(R.id.main_fragment, weatherFragment);
+                transaction.replace(R.id.main_fragment, weatherFragment, "weather");
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

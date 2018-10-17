@@ -1,6 +1,8 @@
 package com.capco.freebern.tim.weatherapp.location.model;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
 
     private double latitude;
     private double longitude;

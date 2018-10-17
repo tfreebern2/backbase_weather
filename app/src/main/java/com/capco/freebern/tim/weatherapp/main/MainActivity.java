@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.capco.freebern.tim.weatherapp.LocationsService;
 import com.capco.freebern.tim.weatherapp.R;
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private LocationsService mLocationsService;
     private MainFragment mMainFragment;
+    private HelpFragment mHelpFragment;
     private Activity mActivity;
 
     @Override
@@ -23,20 +25,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(savedInstanceState != null){
+            mMainFragment = (MainFragment) getSupportFragmentManager().getFragment(savedInstanceState, "main");
+            mHelpFragment = (HelpFragment) getSupportFragmentManager().getFragment(savedInstanceState, "help");
+        } else {
+            mMainFragment = new MainFragment();
+        }
+
         mLocationsService = new LocationsService(getApplicationContext());
-
-        mMainFragment = new MainFragment();
-
-        final FragmentTransaction transaction =
+        FragmentTransaction transaction =
                 getSupportFragmentManager().beginTransaction();
 
-        transaction.replace(R.id.main_fragment, mMainFragment);
+        if ( mHelpFragment != null && mHelpFragment.isVisible()) {
+            transaction.replace(R.id.main_fragment, mHelpFragment, "help");
+        } else {
+            transaction.replace(R.id.main_fragment, mMainFragment, "main");
+        }
 
         transaction.commit();
-
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
-
+        Toolbar tb = findViewById(R.id.main_toolbar);
+        setSupportActionBar(tb);
     }
 
     @Override
@@ -60,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.miHelp:
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                HelpFragment helpFragment = new HelpFragment();
-                transaction.replace(R.id.main_fragment, helpFragment);
+                mHelpFragment = new HelpFragment();
+                transaction.replace(R.id.main_fragment, mHelpFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
                 return true;
@@ -71,6 +79,15 @@ public class MainActivity extends AppCompatActivity {
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
 
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState, "main", mMainFragment);
+        if (mHelpFragment != null) {
+            getSupportFragmentManager().putFragment(outState, "help", mHelpFragment);
         }
     }
 }
