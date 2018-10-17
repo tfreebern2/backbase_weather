@@ -1,16 +1,21 @@
 package com.capco.freebern.tim.weatherapp.weather;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.capco.freebern.tim.weatherapp.R;
 import com.capco.freebern.tim.weatherapp.WeatherService;
+import com.capco.freebern.tim.weatherapp.help.HelpFragment;
 import com.capco.freebern.tim.weatherapp.location.model.Location;
 import com.capco.freebern.tim.weatherapp.weather.model.CurrentWeather;
 
@@ -18,6 +23,7 @@ public class WeatherFragment extends Fragment {
     private WeatherService weatherService;
     private Location location;
     private View view;
+    private Activity mActivity;
 
     @Nullable
     @Override
@@ -28,6 +34,7 @@ public class WeatherFragment extends Fragment {
         openWeatherAPITask.execute(location);
         TextView cityNameText = view.findViewById(R.id.tv_city);
         cityNameText.setText(location.getName());
+
         return view;
     }
 

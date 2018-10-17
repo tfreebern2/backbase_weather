@@ -16,6 +16,7 @@ import com.capco.freebern.tim.weatherapp.location.model.Location;
 import com.capco.freebern.tim.weatherapp.main.MainActivity;
 import com.capco.freebern.tim.weatherapp.map.marker.MarkerManager;
 import com.capco.freebern.tim.weatherapp.weather.GeocodeAPITask;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -72,6 +73,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         List<Location> locations = ((MainActivity) getActivity()).getLocationsService().getAllLocations();
         for(Location location : locations){
             mMap.addMarker(MarkerManager.convertToMarkerOptions(location));
+            if(locations.size() > 0){
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(locations.get(0)
+                        .getLatitude(), locations.get(0).getLongitude()), 8.0f));
+            }
         }
     }
 
